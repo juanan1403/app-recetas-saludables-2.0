@@ -1,0 +1,6 @@
+streamlit
+tensorflow
+cohere
+pillow
+opencv-python-headless
+cv2
