@@ -1,0 +1,13 @@
+0 Fresa
+1 Naranja
+2 Piña
+3 Otros
+4 Cebolla
+5 Tomate
+6 Zanahoria
+7 Pepino
+8 Puerro
+9 Apio
+10 Pan
+11 Salmón
+12 Pollo
