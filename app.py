@@ -3,47 +3,6 @@ import numpy as np
 import tensorflow as tf
 import cohere
 import streamlit as st
-
-# Inicializar Cohere
-cohere_api_key = 'JT3Oiog1cwFuKZotUAh3Qwi4UUrKAmoKT8uepSCp'  # Reemplaza con tu API key
-co = cohere.Client(cohere_api_key)
-
-# Cargar el modelo TensorFlow Lite
-interpreter = tf.lite.Interpreter(model_path='model_unquant.tflite')
-interpreter.allocate_tensors()
-input_details = interpreter.get_input_details()
-output_details = interpreter.get_output_details()
-
-clases_teachable = ['Fresa', 'Naranja', 'Piña', 'Otros', 'Cebolla', 'Tomate', 'Zanahoria', 'Pepino', 'Puerro', 'Apio', 'Pan', 'Salmón', 'Pollo']
-
-# Lista para almacenar los alimentos detectados
-if "alimentos_detectados" not in st.session_state:
-    st.session_state["alimentos_detectados"] = []
-
-def preprocess_input_teachablemachine(img):
-    img = img / 255.0
-    return img
-
-def detectar_alimentos(frame):
-    img_resized = cv2.resize(frame, (224, 224))
-    x_img = np.expand_dims(img_resized, axis=0)
-    x_img = preprocess_input_teachablemachine(x_img)
-
-    interpreter.set_tensor(input_details[0]['index'], x_img.astype(np.float32))
-    interpreter.invoke()
-    preds = interpreter.get_tensor(output_details[0]['index'])[0]
-    max_prob = np.max(preds)
-    prediccion_clase = np.argmax(preds)
-    nombre_clase = clases_teachable[prediccion_clase]
-
-    if max_prob > 0.8 and nombre_clase not in st.session_state["alimentos_detectados"]:
-        st.session_state["alimentos_detectados"].append(nombre_clase)
-
-    return nombre_clase, import cv2
-import numpy as np
-import tensorflow as tf
-import cohere
-import streamlit as st
 from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
 
 # Inicializar Cohere
