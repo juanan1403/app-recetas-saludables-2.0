@@ -3,7 +3,7 @@ import numpy as np
 import tensorflow as tf
 import cohere
 import streamlit as st
-from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
+from streamlit_webrtc import webrtc_streamer, VideoProcessorBase
 
 # Inicializar Cohere
 cohere_api_key = 'JT3Oiog1cwFuKZotUAh3Qwi4UUrKAmoKT8uepSCp'  # Reemplaza con tu API key
@@ -48,11 +48,11 @@ def obtener_recetas_con_cohere(alimentos):
     return response.generations[0].text.strip()
 
 # Clase para manejar el video
-class FoodDetectorTransformer(VideoTransformerBase):
+class FoodDetectorProcessor(VideoProcessorBase):
     def __init__(self):
         self.interpreter = interpreter
 
-    def transform(self, frame):
+    def recv(self, frame):
         frame = frame.to_ndarray(format="bgr24")
         nombre_clase, prob = detectar_alimentos(frame)
 
@@ -70,7 +70,7 @@ st.write("Apunta la cámara a los alimentos para detectarlos y obtener recetas."
 # Iniciar la cámara con WebRTC
 webrtc_streamer(
     key="food-detector",
-    video_transformer_factory=FoodDetectorTransformer,
+    video_processor_factory=FoodDetectorProcessor,
     media_stream_constraints={"video": True, "audio": False},
 )
 
@@ -87,3 +87,4 @@ if st.button("Obtener Recetas"):
             st.text(recetas)
     else:
         st.warning("No se han detectado alimentos aún.")
+
